@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -18,6 +19,20 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+    }
+    secrets {
+        // Optionally specify a different file name containing your secrets.
+        // The plugin defaults to "local.properties"
+        propertiesFileName = "secrets.properties"
+
+        // A properties file containing default secret values. This file can be
+        // checked in version control.
+        defaultPropertiesFileName = "local.defaults.properties"
+
+        // Configure which keys should be ignored by the plugin by providing regular expressions.
+        // "sdk.dir" is ignored by default.
+        ignoreList.add("keyToIgnore") // Ignore the key "keyToIgnore"
+        ignoreList.add("sdk.*")       // Ignore all keys matching the regexp "sdk.*"
     }
 
     buildTypes {
@@ -47,9 +62,22 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    buildToolsVersion = "34.0.0"
 }
 
 dependencies {
+
+    val mapsComposeVersion = "4.4.1"
+
+    // Google Maps Compose
+    implementation("com.google.maps.android:maps-compose:$mapsComposeVersion")
+
+    // Utilidades de Google Maps para Jetpack Compose
+    implementation("com.google.maps.android:maps-compose-utils:$mapsComposeVersion")
+
+    // Widgets de Google Maps Compose
+    implementation("com.google.maps.android:maps-compose-widgets:$mapsComposeVersion")
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
